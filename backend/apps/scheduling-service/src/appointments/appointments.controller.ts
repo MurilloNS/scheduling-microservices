@@ -1,5 +1,12 @@
 import { AppointmentsService } from './appointments.service';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 
 @Controller('appointments')
@@ -12,6 +19,7 @@ export class AppointmentsController {
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentsService.create(createAppointmentDto);
   }

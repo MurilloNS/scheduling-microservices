@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { SchedulingServiceController } from './scheduling-service.controller';
 import { SchedulingServiceService } from './scheduling-service.service';
 import { AppointmentsModule } from './appointments/appointments.module';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from '@app/database';
 
 @Module({
   imports: [AppointmentsModule, DatabaseModule],
