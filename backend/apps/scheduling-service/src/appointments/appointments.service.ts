@@ -6,13 +6,23 @@ import { QUEUES } from '@app/common/messaging/queues';
 import { SERVICES } from '@app/common/messaging/services';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from '@prisma/client';
+import { AppointmentCreatedEvent } from '@app/common/messaging/events/appointment-created.event';
+import { AppointmentUpdatedEvent } from '@app/common/messaging/events/appointment-updated.event';
+import { AppointmentDeletedEvent } from '@app/common/messaging/events/appointment-deleted.event';
 
 @Injectable()
 export class AppointmentsService {
   constructor(
     private readonly appointmentRepository: AppointmentRepository,
-    @Inject(SERVICES.APPOINTMENT_SERVICE)
-    private readonly client: ClientProxy,
+
+    @Inject('APPOINTMENT_CREATED_CLIENT')
+    private readonly createdClient: ClientProxy,
+
+    @Inject('APPOINTMENT_UPDATED_CLIENT')
+    private readonly updatedClient: ClientProxy,
+
+    @Inject('APPOINTMENT_DELETED_CLIENT')
+    private readonly deletedClient: ClientProxy,
   ) {}
 
   async findAll(): Promise<Appointment[]> {
@@ -22,7 +32,15 @@ export class AppointmentsService {
   async create(data: CreateAppointmentDto): Promise<Appointment> {
     const appointment = await this.appointmentRepository.create(data);
 
-    this.client.emit(QUEUES.APPOINTMENT_CREATED, appointment);
+    const event: AppointmentCreatedEvent = {
+      id: appointment.id,
+      userId: appointment.userId,
+      serviceName: appointment.serviceName,
+      date: appointment.date,
+      createdAt: appointment.createdAt,
+    };
+
+    this.createdClient.emit(QUEUES.APPOINTMENT_CREATED, event).subscribe();
 
     return appointment;
   }
@@ -30,7 +48,15 @@ export class AppointmentsService {
   async update(id: string, data: UpdateAppointmentDto): Promise<Appointment> {
     const appointment = await this.appointmentRepository.update(id, data);
 
-    this.client.emit(QUEUES.APPOINTMENT_UPDATED, appointment);
+    const event: AppointmentUpdatedEvent = {
+      id: appointment.id,
+      userId: appointment.userId,
+      serviceName: appointment.serviceName,
+      date: appointment.date,
+      updatedAt: appointment.updatedAt,
+    };
+
+    this.updatedClient.emit(QUEUES.APPOINTMENT_UPDATED, event).subscribe();
 
     return appointment;
   }
@@ -38,6 +64,11 @@ export class AppointmentsService {
   async delete(id: string): Promise<void> {
     const appointment = await this.appointmentRepository.delete(id);
 
-    this.client.emit(QUEUES.APPOINTMENT_DELETED, appointment);
+    const event: AppointmentDeletedEvent = {
+      id: appointment.id,
+      userId: appointment.userId,
+    };
+
+    this.deletedClient.emit(QUEUES.APPOINTMENT_DELETED, event).subscribe();
   }
 }

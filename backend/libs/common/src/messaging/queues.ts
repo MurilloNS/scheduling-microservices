@@ -1,5 +1,5 @@
 export const QUEUES = {
-  APPOINTMENT_CREATED: 'appointment_created',
-  APPOINTMENT_UPDATED: 'appointment_updated',
-  APPOINTMENT_DELETED: 'appointment_deleted',
+  APPOINTMENT_CREATED: 'appointment.created',
+  APPOINTMENT_UPDATED: 'appointment.updated',
+  APPOINTMENT_DELETED: 'appointment.deleted',
 };
