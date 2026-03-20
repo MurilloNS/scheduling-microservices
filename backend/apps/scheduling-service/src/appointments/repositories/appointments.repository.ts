@@ -16,6 +16,7 @@ export class AppointmentRepository {
     return this.prisma.appointment.create({
       data: {
         userId: data.userId,
+        email: data.email,
         serviceName: data.serviceName,
         date: new Date(data.date),
       },

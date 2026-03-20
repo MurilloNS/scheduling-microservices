@@ -3,7 +3,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { QUEUES } from '@app/common/messaging/queues';
-import { SERVICES } from '@app/common/messaging/services';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from '@prisma/client';
 import { AppointmentCreatedEvent } from '@app/common/messaging/events/appointment-created.event';
@@ -35,6 +34,7 @@ export class AppointmentsService {
     const event: AppointmentCreatedEvent = {
       id: appointment.id,
       userId: appointment.userId,
+      email: appointment.email,
       serviceName: appointment.serviceName,
       date: appointment.date,
       createdAt: appointment.createdAt,
@@ -51,6 +51,7 @@ export class AppointmentsService {
     const event: AppointmentUpdatedEvent = {
       id: appointment.id,
       userId: appointment.userId,
+      email: appointment.email,
       serviceName: appointment.serviceName,
       date: appointment.date,
       updatedAt: appointment.updatedAt,
@@ -67,6 +68,7 @@ export class AppointmentsService {
     const event: AppointmentDeletedEvent = {
       id: appointment.id,
       userId: appointment.userId,
+      email: appointment.email,
     };
 
     this.deletedClient.emit(QUEUES.APPOINTMENT_DELETED, event).subscribe();

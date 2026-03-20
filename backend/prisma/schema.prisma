@@ -15,6 +15,7 @@ datasource db {
 model Appointment {
   id String @id @default(uuid())
   userId String
+  email String
   serviceName String
   date DateTime
   createdAt DateTime @default(now())

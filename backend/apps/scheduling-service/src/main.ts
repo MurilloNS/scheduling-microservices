@@ -1,16 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { SchedulingServiceModule } from './scheduling-service.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { QUEUES } from '@app/common/messaging/queues';
 
 async function bootstrap() {
-  /*
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+  /*const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     SchedulingServiceModule,
     {
       transport: Transport.RMQ,
       options: {
         urls: ['amqp://localhost:5672'],
-        queue: 'appointments_queue',
+        queue: QUEUES.SCHEDULING_COMMAND_QUEUE,
         queueOptions: {
           durable: true,
         },
@@ -22,18 +22,6 @@ async function bootstrap() {
 
   const app = await NestFactory.create(SchedulingServiceModule);
 
-  app.connectMicroservice({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      queue: 'appointments_queue',
-      queueOptions: {
-        durable: true,
-      },
-    },
-  });
-
-  await app.startAllMicroservices();
   await app.listen(3000);
 }
 

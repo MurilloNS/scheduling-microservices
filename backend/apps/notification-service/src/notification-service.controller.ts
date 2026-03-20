@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { NotificationServiceService } from './notification-service.service';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { QUEUES } from '@app/common/messaging/queues';
@@ -14,16 +14,16 @@ export class NotificationServiceController {
 
   @EventPattern(QUEUES.APPOINTMENT_CREATED)
   handleAppointmentCreated(@Payload() data: AppointmentCreatedEvent) {
-    console.log('📩 [Notification] Appointment CREATED:', data);
+    return this.notificationServiceService.handleAppointmentCreated(data);
   }
 
   @EventPattern(QUEUES.APPOINTMENT_UPDATED)
   handleAppointmentUpdated(@Payload() data: AppointmentUpdatedEvent) {
-    console.log('📩 [Notification] Appointment UPDATED:', data);
+    return this.notificationServiceService.handleAppointmentUpdated(data);
   }
 
   @EventPattern(QUEUES.APPOINTMENT_DELETED)
   handleAppointmentDeleted(@Payload() data: AppointmentDeletedEvent) {
-    console.log('📩 [Notification] Appointment DELETED:', data);
+    return this.notificationServiceService.handleAppointmentDeleted(data);
   }
 }

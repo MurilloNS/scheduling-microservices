@@ -1,5 +1,9 @@
 export const QUEUES = {
-  APPOINTMENT_CREATED: 'appointment.created',
-  APPOINTMENT_UPDATED: 'appointment.updated',
-  APPOINTMENT_DELETED: 'appointment.deleted',
+  // Comandos (entrada do scheduling)
+  SCHEDULING_COMMAND_QUEUE: 'scheduling_command_queue',
+
+  // Eventos
+  APPOINTMENT_CREATED: 'appointment_created',
+  APPOINTMENT_UPDATED: 'appointment_updated',
+  APPOINTMENT_DELETED: 'appointment_deleted',
 };
