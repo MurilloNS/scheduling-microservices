@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { NotificationServiceModule } from './notification-service.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { Transport } from '@nestjs/microservices';
 import { QUEUES } from '@app/common/messaging/queues';
 
 async function bootstrap() {
@@ -34,5 +34,6 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+  await app.init();
 }
-bootstrap();
+void bootstrap();
