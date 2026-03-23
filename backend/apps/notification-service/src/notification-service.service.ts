@@ -3,6 +3,9 @@ import { AppointmentDeletedEvent } from '@app/common/messaging/events/appointmen
 import { AppointmentUpdatedEvent } from '@app/common/messaging/events/appointment-updated.event';
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import { appointmentCreatedTemplate } from './templates/appointment-created.template';
+import { appointmentUpdatedTemplate } from './templates/appointment-updated.template';
+import { appointmentDeletedTemplate } from './templates/appointment-deleted.template';
 
 @Injectable()
 export class NotificationServiceService {
@@ -24,32 +27,17 @@ export class NotificationServiceService {
   }
 
   async handleAppointmentCreated(data: AppointmentCreatedEvent) {
-    console.log('📩 [Notification] Appointment CREATED:', data);
-
-    await this.sendEmail(
-      data.email,
-      'Agendamento criado',
-      `Seu agendamento para ${data.serviceName} foi criado na data ${data.date}`,
-    );
+    const { subject, text } = appointmentCreatedTemplate(data);
+    await this.sendEmail(data.email, subject, text);
   }
 
   async handleAppointmentUpdated(data: AppointmentUpdatedEvent) {
-    console.log('📩 [Notification] Appointment UPDATED:', data);
-
-    await this.sendEmail(
-      data.email,
-      'Agendamento atualizado',
-      `Seu agendamento foi atualizado para ${data.date}`,
-    );
+    const { subject, text } = appointmentUpdatedTemplate(data);
+    await this.sendEmail(data.email, subject, text);
   }
 
   async handleAppointmentDeleted(data: AppointmentDeletedEvent) {
-    console.log('📩 [Notification] Appointment DELETED:', data);
-
-    await this.sendEmail(
-      data.email,
-      'Agendamento cancelado',
-      `Seu agendamento foi cancelado.`,
-    );
+    const { subject, text } = appointmentDeletedTemplate();
+    await this.sendEmail(data.email, subject, text);
   }
 }
