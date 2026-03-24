@@ -6,31 +6,21 @@ import { QUEUES } from '@app/common/messaging/queues';
 async function bootstrap() {
   const app = await NestFactory.create(NotificationServiceModule);
 
-  app.connectMicroservice({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      queue: QUEUES.APPOINTMENT_CREATED,
-      queueOptions: { durable: true },
-    },
-  });
+  const queues = [
+    QUEUES.APPOINTMENT_CREATED,
+    QUEUES.APPOINTMENT_UPDATED,
+    QUEUES.APPOINTMENT_DELETED,
+  ];
 
-  app.connectMicroservice({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      queue: QUEUES.APPOINTMENT_UPDATED,
-      queueOptions: { durable: true },
-    },
-  });
-
-  app.connectMicroservice({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      queue: QUEUES.APPOINTMENT_DELETED,
-      queueOptions: { durable: true },
-    },
+  queues.forEach((queue) => {
+    app.connectMicroservice({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBITMQ_URL],
+        queue: queue,
+        queueOptions: { durable: true },
+      },
+    });
   });
 
   await app.startAllMicroservices();
