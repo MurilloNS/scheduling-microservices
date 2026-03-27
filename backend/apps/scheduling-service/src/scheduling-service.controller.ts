@@ -3,7 +3,9 @@ import { SchedulingServiceService } from './scheduling-service.service';
 
 @Controller()
 export class SchedulingServiceController {
-  constructor(private readonly schedulingServiceService: SchedulingServiceService) {}
+  constructor(
+    private readonly schedulingServiceService: SchedulingServiceService,
+  ) {}
 
   @Get()
   getHello(): string {

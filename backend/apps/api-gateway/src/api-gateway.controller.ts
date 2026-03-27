@@ -24,13 +24,12 @@ export class ApiGatewayController {
 
     const targetUrl = `http://localhost:3001${req.url}`;
 
-    const {
-      host: _host,
-      'content-length': contentLength,
-      connection,
-      'accept-encoding': acceptEncoding,
-      ...headers
-    } = req.headers;
+    const headers = { ...req.headers };
+
+    delete headers.host;
+    delete headers['content-length'];
+    delete headers.connection;
+    delete headers['accept-encoding'];
 
     const response = await this.service.forwardRequest(
       req.method,

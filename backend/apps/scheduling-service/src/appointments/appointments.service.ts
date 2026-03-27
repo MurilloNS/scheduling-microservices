@@ -41,7 +41,7 @@ export class AppointmentsService {
       createdAt: appointment.createdAt,
     };
 
-    //this.createdClient.emit(QUEUES.APPOINTMENT_CREATED, event);
+    this.createdClient.emit(QUEUES.APPOINTMENT_CREATED, event);
 
     return appointment;
   }
