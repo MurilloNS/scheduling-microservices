@@ -24,6 +24,7 @@ export class AppointmentsController {
 
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
+    console.log('CHEGOU');
     return this.appointmentsService.create(createAppointmentDto);
   }
 

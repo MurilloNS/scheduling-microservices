@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
       algorithms: ['RS256'],
 
-      secretOnKeyProvider: jwksRsa.passportJwtSecret({
+      secretOrKeyProvider: jwksRsa.passportJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,

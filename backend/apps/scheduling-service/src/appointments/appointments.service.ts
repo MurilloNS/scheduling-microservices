@@ -29,6 +29,7 @@ export class AppointmentsService {
   }
 
   async create(data: CreateAppointmentDto): Promise<Appointment> {
+    console.log('CHEGOU NO SERVICE');
     const appointment = await this.appointmentRepository.create(data);
 
     const event: AppointmentCreatedEvent = {
@@ -40,7 +41,7 @@ export class AppointmentsService {
       createdAt: appointment.createdAt,
     };
 
-    this.createdClient.emit(QUEUES.APPOINTMENT_CREATED, event).subscribe();
+    //this.createdClient.emit(QUEUES.APPOINTMENT_CREATED, event);
 
     return appointment;
   }
@@ -57,7 +58,7 @@ export class AppointmentsService {
       updatedAt: appointment.updatedAt,
     };
 
-    this.updatedClient.emit(QUEUES.APPOINTMENT_UPDATED, event).subscribe();
+    this.updatedClient.emit(QUEUES.APPOINTMENT_UPDATED, event);
 
     return appointment;
   }
@@ -71,6 +72,6 @@ export class AppointmentsService {
       email: appointment.email,
     };
 
-    this.deletedClient.emit(QUEUES.APPOINTMENT_DELETED, event).subscribe();
+    this.deletedClient.emit(QUEUES.APPOINTMENT_DELETED, event);
   }
 }
