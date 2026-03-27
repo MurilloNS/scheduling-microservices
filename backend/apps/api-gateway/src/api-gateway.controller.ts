@@ -24,10 +24,8 @@ export class ApiGatewayController {
 
     const targetUrl = `http://localhost:3001${req.url}`;
 
-    console.log('TARGET URL:', targetUrl);
-
     const {
-      host,
+      host: _host,
       'content-length': contentLength,
       connection,
       'accept-encoding': acceptEncoding,
@@ -45,6 +43,8 @@ export class ApiGatewayController {
       },
     );
 
-    return res.status(response.status).send(response.data);
+    return res
+      .status(response.status ?? 500)
+      .send(response.data ?? { message: 'Unknown error' });
   }
 }
