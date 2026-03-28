@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { User } from '../common/decorators/user.decorator';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -23,9 +24,14 @@ export class AppointmentsController {
   }
 
   @Post()
-  create(@Body() createAppointmentDto: CreateAppointmentDto) {
-    console.log('CHEGOU');
-    return this.appointmentsService.create(createAppointmentDto);
+  create(
+    @User() user: { userId: string; roles: string[] },
+    @Body() createAppointmentDto: CreateAppointmentDto,
+  ) {
+    return this.appointmentsService.create({
+      ...createAppointmentDto,
+      userId: user.userId,
+    });
   }
 
   @Patch(':id')
